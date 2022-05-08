@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Detection</title>
+    <style>
+        .hidden {
+          display: none;
+        }
+    </style>
+
+    <!-- Font Awesome -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.min.css"
+    rel="stylesheet"
+    />
+
+</head>
+<body onload="hideLoadingDiv()">
+    <div class="p-4">
+        <h3 class="text-center text-white mb-4 my-2 p-4 bg-primary card">Detect Text in an Image using Amazon Rekognition</h3>
+        {% if statement %}
+            <div class="text-center" id="LOADING" >
+                {% if statement == "success" %}
+                    <br><button style="width:100%" type="submit" class="mx-auto btn btn-success text-nowrap"> Text Detection Successful</button>
+                {% else %}
+                    <br>
+                    <button style="width:100%" type="submit" class="mx-auto btn btn-danger text-nowrap"> {{ statement }}</button>
+                {% endif %}
+            </div>
+         <br>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-12 col-md-12 col-lg-12 border rounded p-4">
+                <form id="todo-form" action="/upload" method="post" enctype="multipart/form-data">
+                    <br>
+                    <input type="file" name="file" autocomplete="off" required><br><br>
+                    <button type="submit" class="mx-auto btn btn-primary text-nowrap">Upload</button>
+                </form>
+            </div>
+        </div>
+        {% if result_image %}
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-6 border rounded p-4">
+                    <img style="width:100%; height: 100%" src="{{ url_for('display_result_image', filename=result_image) }}"><br><br>
+            </div>
+            <div class="col-12 col-md-6 col-lg-6 border rounded p-4">
+                <center><b class="mx-auto btn btn-success text-nowrap">Text DETECTION RESULT</b> </center><br/>
+                    <div class="overflow-auto p-3 mb-3 mb-md-0 mr-md-3 bg-dark" style="max-width: 100%; max-height: 400px;">
+                         <code>
+                            {% for key,val in result_json_response.items() %}
+                                {% for key1,val1 in val.items() %}
+                             {{ key1 }}: <kbd> {{ val1 }}</kbd><br>
+                                {% endfor %}
+                             <br>
+                            {% endfor %}
+                         </code>
+                    </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if jsonfile %}
+            <div class="row">
+                <br><br>
+                <center><b class="mx-auto btn btn-success text-nowrap">JSON RESULT FROM AWS</b> </center><br/><br/>
+                <div class="col-12 col-md-12 col-lg-12 border rounded p-4 overflow-auto p-3 mb-3 mb-md-0 mr-md-3 bg-dark" style="max-width: 100%; max-height: 350px;">
+                    <pre>
+                        <kbd>{{ jsonfile }}</kbd>
+                    </pre>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- MDB -->
+    <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.min.js"
+    ></script>
+    <script>
+        function hideLoadingDiv() {
+          setTimeout(function(){
+            document.getElementById('LOADING').classList.add('hidden');
+          },5000)
+        }
+    </script>
+    <script type="text/javascript">
+        window.history.forward();
+        function noBack() {
+            window.history.forward();
+        }
+    </script>
+
+</body>
+</html>
